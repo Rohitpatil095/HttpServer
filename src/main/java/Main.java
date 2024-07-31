@@ -38,12 +38,29 @@ public class Main {
                      // break on CRLF
                      if (builder.toString().contains("\r\n")) break;
                  }
+
                  System.out.println(builder.toString());
                  String clientRequestAddress=builder.toString();
                  String[] reqPara=clientRequestAddress.split(" ");
-                 if (reqPara[1].equals("/") && reqPara[0].equals("GET")) socket.getOutputStream().write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
 
-                 if (!reqPara[1].isBlank() && reqPara[0].equals("GET")) socket.getOutputStream().write("HTTP/1.1 404 Not Found\r\n\r\n".getBytes());
+                 String[] splittedReq=reqPara[1].split("/");
+                 if (reqPara[1].equals("/") && reqPara[0].equals("GET"))
+                 {
+                     socket.getOutputStream().write(("HTTP/1.1 200 OK\r\n\r\n").getBytes());
+                 }
+                 else if (!reqPara[1].isBlank() && reqPara[0].equals("GET"))
+                 {
+                     String userText=splittedReq[splittedReq.length-1];
+                     int userTextSize=userText.length();
+                     if(splittedReq[1].equals("echo") && splittedReq.length>1)
+                     {
+                         socket.getOutputStream().write(("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+userTextSize+"\r\n\r\n"+userText).getBytes());
+                     }
+                     else
+                     {
+                         socket.getOutputStream().write(("HTTP/1.1 404 Not Found\r\n\r\n").getBytes());
+                     }
+                 }
                  }
              catch(IOException e){
                      System.out.println("IOException: " + e.getMessage());
