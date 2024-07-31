@@ -41,10 +41,10 @@ public class Main {
                  System.out.println(builder.toString());
                  String clientRequestAddress=builder.toString();
                  String[] reqPara=clientRequestAddress.split(" ");
+                 if (reqPara[1].equals("/") && reqPara[0].equals("GET")) socket.getOutputStream().write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
 
-                 if (reqPara[1].equals("/abcdefg") && reqPara[0].equals("GET")) socket.getOutputStream().write("HTTP/1.1 404 Not Found\r\n\r\n".getBytes());
-                 else if (reqPara[1].equals("/") && reqPara[0].equals("GET")) socket.getOutputStream().write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-             }
+                 if (!reqPara[1].isBlank() && reqPara[0].equals("GET")) socket.getOutputStream().write("HTTP/1.1 404 Not Found\r\n\r\n".getBytes());
+                 }
              catch(IOException e){
                      System.out.println("IOException: " + e.getMessage());
 
